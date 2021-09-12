@@ -11,3 +11,16 @@ class Image(models.Model):
     profile =models.ForeignKey(User)
     user_profile=models.ForeignKey(Profile)
     image=models.ImageField(upload_to='images/',default="Image")
+
+
+    def __str__(self):
+        return self.image_name
+
+class Profile:(models.Model):
+    profile_pic=models.ImageField('photo')
+    Bio=models.CharField(max_length=35)
+    user= models.OneToOneField(User, on_delete=models.CASCADE,null=True)
+
+    def __str__(self):
+        return self.user
+
