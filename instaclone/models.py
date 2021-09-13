@@ -1,33 +1,42 @@
 from django.db import models
 import datetime as dt
 from django.contrib.auth.models import User
+
+
+
 # Create your models here.
 
 
-class Image(models.Model):
-    image_name =models.CharField(max_length=60,blank=True)
-    image_caption=models.CharField(max_length=60,blank=True)
-    posted_On = models.DateTimeField(auto_now_add=True)
-    profile =models.ForeignKey(User,on_delete=models.CASCADE,blank=True)
-    # user_profile=models.ForeignKey(Profile)
-    image=models.ImageField(upload_to='images/',default="Image")
-
-
-    def __str__(self):
-        return self.image_name
-
 class Profile(models.Model):
-    profile_pic=models.ImageField('photo')
-    Bio=models.CharField(max_length=35)
-    user= models.OneToOneField(User, on_delete=models.CASCADE,null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_pic = models.ImageField(blank=True,upload_to = 'gallery/')
+    bio = models.CharField(max_length = 255)
 
     def __str__(self):
-        return self.user
+        return f'{self.user.username}'
 
+class Image(models.Model):
+    photo = models.ImageField(upload_to = 'images/')
+    caption = models.CharField(blank=True,max_length = 255)
+    profile = models.ForeignKey(Profile,on_delete=models.CASCADE)
+    like = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.profile.user.username}'
+
+class Follow(models.Model):
+    username = models.CharField(blank=True,max_length = 255)
+    followed = models.CharField(blank=True,max_length = 255)
+
+    def __str__(self):
+        return f'{self.username}'
 
 class Comment(models.Model):
-    Comment=models.TextField()
-    image=models.ForeignKey(Image,on_delete=models.CASCADE)
-    posted_on =models.DateTimeField(auto_now_add=True,null=True)
+    post = models.IntegerField(default=0)
+    username = models.CharField(blank=True,max_length = 255)
+    comment = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+    count = models.IntegerField(default=0)
 
-
+    def __str__(self):
+        return f'{self.username}'
