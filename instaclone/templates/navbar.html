@@ -18,30 +18,39 @@
             </div>
 
             <div class="col-sm-6 col-md-6">
+                {% if user.is_authenticated %}
 
                 <ul>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle btn btn-default" data-toggle="dropdown" role="button" aria-expanded="false">Account
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>
-                                <a href="{%url 'index'%}">Home</a>
-                            </li>
-                            <li>
-                                <a href="/accounts/password/change">Change Password</a>
-                            </li>
-                            <li>
-                                <a href="/logout">Logout</a>
-                            </li>
+                    <li class="" style="display:flex;">
+                        <ul style="list-style:none;display:flex;">
+                            <button style="margin:5px" type="button" class="btn btn-sm">
+                                <a href="">Home</a>
+                            </button>
+                            <button style="margin:5px" type="button" class="btn btn-sm">
+                                <a href="/accounts/password_change">Change password</a>
+                            </button>
+                            <button style="margin:5px" type="button" class="btn btn-sm">
+                                <a href="">Logout</a>
+                            </button>
                         </ul>
                     </li>
                 </ul>
+                <div class="navbar-right">
+                    <a href="" style="padding:3px"><img src="../static/icons/icons8-add-24.png" alt="Add" width="24" height="24">
+                        <i class="fas fa-user text-white h3 ">
+                        </i></a>
+                    <a href="" style="padding:3px"><img src="../static/icons/Avatar.png" alt="Avatar" width="24px">
+                        <i class="fas fa-user text-white h3 ">
+                        </i>
+                    </a>
+                </div>
 
+                {% else %}
                 <li>
                     <a class='btn btn-default' href="/accounts/login">Login</a>
                 </li>
 
+                {% endif %}
 
             </div>
 
