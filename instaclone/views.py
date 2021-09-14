@@ -14,9 +14,9 @@ def index(request):
 def profile(request):
     images=Image.objects.all()
     current_user = request.user
-    following=Following.objects.filter(username=current_user.username).all()
+    following=Follow.objects.filter(username=current_user.username).all()
     followingcount=len(following)
-    followers=Following.objects.filter(followed=request.user.username).all()
+    followers=Follow.objects.filter(followed=request.user.username).all()
     followercount=len(followers)
     if request.method == 'POST':
         form = FormDetails(request.POST, request.FILES)
@@ -27,9 +27,9 @@ def profile(request):
             profile.save()
 
         if form1.is_valid():
-            image = form1.save(commit=False)
-            image.profile = current_user.profile
-            image.save()
+            post = form1.save(commit=False)
+            post.profile = current_user.profile
+            post.save()
 
         return redirect('profile')
 
@@ -43,36 +43,36 @@ def profile(request):
 def timeline(request):
     users = User.objects.all()
     images = Image.objects.all()
-    follows = Following.objects.all()
+    follows = Follow.objects.all()
     comments = Comment.objects.all()
     if request.method=='POST' and 'follow' in request.POST:
-        following=Following(username=request.POST.get("follow"),followed=request.user.username)
+        following=Follow(username=request.POST.get("follow"),followed=request.user.username)
         following.save()
         return redirect('timeline')
     elif request.method=='POST' and 'comment' in request.POST:
         comment=Comment(comment=request.POST.get("comment"),
-                        image=int(request.POST.get("imaged")),
+                        post=int(request.POST.get("posted")),
                         username=request.POST.get("user"),
                         count=0)
         comment.save()
         comment.count=F('count')+1
         return redirect('timeline')
-    elif request.method=='POST' and 'image' in request.POST:
+    elif request.method=='POST' and 'post' in request.POST:
         posted=request.POST.get("post")
-        for image in images:
-            if (int(image.id)==int(imaged)):
-                image.like+=1
-                image.save()
+        for post in images:
+            if (int(post.id)==int(posted)):
+                post.like+=1
+                post.save()
         return redirect('timeline')
     else:
-        return render(request, 'timeline.html',{"users":users,"follows":follows,"images":images,"comments":comments})
+        return render(request, 'instapp/timeline.html',{"users":users,"follows":follows,"images":images,"comments":comments})
 
 
 @login_required(login_url='/accounts/login/')
-def edit_profile(request):
+def update_profile(request):
     current_user = request.user
     if request.method == 'POST':
-        form = DetailsForm(request.POST, request.FILES)
+        form = FormDetails(request.POST, request.FILES)
         if form.is_valid():
                 Profile.objects.filter(id=current_user.profile.id).update(bio=form.cleaned_data["bio"])
                 profile = Profile.objects.filter(id=current_user.profile.id).first()
@@ -90,9 +90,9 @@ def edit_profile(request):
 def other_profile(request,id):
     profile_user=User.objects.filter(id=id).first()
     posts=Image.objects.all()
-    following=Following.objects.filter(username=profile_user.username).all()
+    following=Follow.objects.filter(username=profile_user.username).all()
     followingcount=len(following)
-    followers=Following.objects.filter(followed=profile_user.username).all()
+    followers=Follow.objects.filter(followed=profile_user.username).all()
     followercount=len(followers)
     return render(request, 'instapp/other_profile.html',{"profile_user": profile_user,"posts":posts,"followingcount":followingcount,"followercount":followercount})
 
@@ -101,9 +101,9 @@ def search(request):
     posts=Image.objects.all()
     if 'username' in request.GET and request.GET["username"]:
         search_term = request.GET.get("username")
-        following=Following.objects.filter(username=search_term).all()
+        following=Follow.objects.filter(username=search_term).all()
         followingcount=len(following)
-        followers=Following.objects.filter(followed=search_term).all()
+        followers=Follow.objects.filter(followed=search_term).all()
         followercount=len(followers)
         searched_user = User.objects.filter(username=search_term).first()
         if searched_user:
