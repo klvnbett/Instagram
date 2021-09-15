@@ -12,7 +12,7 @@
         <div class="col-sm-2 col-md-4">
             {% if user.profile.profile_pic.url %}
             <img src="{{user.profile.profile_pic.url}}" alt="" id="profilepic" class="img-fluid"> {% else %}
-            <form action="{%url 'profile' %}" method="image" enctype="multipart/form-data" style="margin-top:10%;">
+            <form action="{%url 'profile' %}" method="post" enctype="multipart/form-data" style="margin-top:10%;">
                 {% csrf_token %} {% bootstrap_form form layout='inline'%}
                 <input type="submit" class="btn-lg btn-outline-info" value="Add Profile">
             </form>
@@ -33,18 +33,9 @@
         <div class="col-sm-2 col-md-3">
             <div id="story">
             </div>
-            <h4 style="margin-top:5%;font:bold;font-size: 20px;">Stories</h4>
+            <h4 style="margin-top:5%;font:bold;font-size: 20px;">We Are all bound to conqure</h4>
         </div>
-        <div class="col-sm-2 col-md-3">
-            <div id="story">
-            </div>
-            <h4 style="margin-top:5%;font:bold;font-size: 20px;">coming</h4>
-        </div>
-        <div class="col-sm-2 col-md-3">
-            <div id="story">
-            </div>
-            <h4 style="margin-top:5%;font:bold;font-size: 20px;">soon!</h4>
-        </div>
+
     </div>
     <div class="nav navbar-nav" role="navigation">
         <div class="container-fluid">
@@ -63,19 +54,19 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{%url 'timeline' %}">
-                            <i class="fas fa-th"></i> images</a>
+                            <i class="fas fa-th"></i> Posts</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{%url 'welcome' %}">
+                        <a class="nav-link" href="{%url 'index' %}">
                             <i class="fas fa-hashtag"></i> Tags
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="{%url 'edit' %}">
-                            <i class="fas fa-cog"></i> Edit Profile</a>
+                        <a class="nav-link " href="{%url 'update' %}">
+                            <i class="fas fa-cog"></i> Update Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{%url 'edit' %}">
+                        <a class="nav-link" href="{%url 'update' %}">
                             <i class="fas fa-bookmark"></i> Saved</a>
                     </li>
                 </ul>
@@ -84,16 +75,16 @@
     </div>
     <div class="row" id="parent">
         <div id="child">
-            <div id="image">
-                <form action="{%url 'profile' %}" method="image" enctype="multipart/form-data" style="margin-top:10%;color: white;">
+            <div id="post">
+                <form action="{%url 'profile' %}" method="post" enctype="multipart/form-data" style="margin-top:10%;color: white;">
                     {% csrf_token %} {% bootstrap_form form1 layout='inline'%}
-                    <input type="submit" class="btn-lg btn-outline-info" value="New image">
+                    <input type="submit" class="btn-lg btn-outline-info" value="New Post">
                 </form>
             </div>
         </div>
-        {% for image in images %} {% if user.profile.id == image.profile.id %}
+        {% for post in posts %} {% if user.profile.id == post.profile.id %}
         <div id="child">
-            <img src="{{image.pic.url}}" alt="" id="image" class="img-fluid">
+            <img src="{{post.pic.url}}" alt="" id="post" class="img-fluid">
         </div>
         {% endif %} {% endfor %}
     </div>

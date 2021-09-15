@@ -1,26 +1,25 @@
 from django.shortcuts import render,redirect
-from django .http import Http404,HttpResponse,HttpResponseRedirect
+from django.http  import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import *
 from .forms import *
 from django.db.models import F
 
-# Create your views here.
 def index(request):
-    return render(request,'instapp/index.html')
+    return render(request, 'instapp/index.html')
 
 @login_required(login_url='/accounts/login/')
 def profile(request):
-    images=Image.objects.all()
+    posts=Post.objects.all()
     current_user = request.user
-    following=Follow.objects.filter(username=current_user.username).all()
+    following=Following.objects.filter(username=current_user.username).all()
     followingcount=len(following)
-    followers=Follow.objects.filter(followed=request.user.username).all()
+    followers=Following.objects.filter(followed=request.user.username).all()
     followercount=len(followers)
     if request.method == 'POST':
-        form = FormDetails(request.POST, request.FILES)
-        form1 = FormImage(request.POST, request.FILES)
+        form = DetailsForm(request.POST, request.FILES)
+        form1 = PostForm(request.POST, request.FILES)
         if form.is_valid():
             profile = form.save(commit=False)
             profile.user = current_user
@@ -34,19 +33,19 @@ def profile(request):
         return redirect('profile')
 
     else:
-        form = FormDetails()
-        form1 = FormImage()
+        form = DetailsForm()
+        form1 = PostForm()
     
-    return render(request, 'instapp/profile.html', {"form":form,"form1":form1,"images":images,"followingcount":followingcount,"followercount":followercount})
+    return render(request, 'instapp/profile.html', {"form":form,"form1":form1,"posts":posts,"followingcount":followingcount,"followercount":followercount})
 
 @login_required(login_url='/accounts/login/')
 def timeline(request):
     users = User.objects.all()
-    images = Image.objects.all()
-    follows = Follow.objects.all()
+    posts = Post.objects.all()
+    follows = Following.objects.all()
     comments = Comment.objects.all()
     if request.method=='POST' and 'follow' in request.POST:
-        following=Follow(username=request.POST.get("follow"),followed=request.user.username)
+        following=Following(username=request.POST.get("follow"),followed=request.user.username)
         following.save()
         return redirect('timeline')
     elif request.method=='POST' and 'comment' in request.POST:
@@ -59,20 +58,19 @@ def timeline(request):
         return redirect('timeline')
     elif request.method=='POST' and 'post' in request.POST:
         posted=request.POST.get("post")
-        for post in images:
+        for post in posts:
             if (int(post.id)==int(posted)):
                 post.like+=1
                 post.save()
         return redirect('timeline')
     else:
-        return render(request, 'instapp/timeline.html',{"users":users,"follows":follows,"images":images,"comments":comments})
-
+        return render(request, 'instapp/timeline.html',{"users":users,"follows":follows,"posts":posts,"comments":comments})
 
 @login_required(login_url='/accounts/login/')
 def update_profile(request):
     current_user = request.user
     if request.method == 'POST':
-        form = FormDetails(request.POST, request.FILES)
+        form = DetailsForm(request.POST, request.FILES)
         if form.is_valid():
                 Profile.objects.filter(id=current_user.profile.id).update(bio=form.cleaned_data["bio"])
                 profile = Profile.objects.filter(id=current_user.profile.id).first()
@@ -82,34 +80,34 @@ def update_profile(request):
         return redirect('profile')
 
     else:
-        form = FormDetails()
+        form = DetailsForm()
     
-    return render(request, 'instapp/_profile.html',{"form": form})
+    return render(request, 'instapp/update_profile.html',{"form": form})
 
 @login_required(login_url='/accounts/login/')
 def other_profile(request,id):
     profile_user=User.objects.filter(id=id).first()
-    posts=Image.objects.all()
-    following=Follow.objects.filter(username=profile_user.username).all()
+    posts=Post.objects.all()
+    following=Following.objects.filter(username=profile_user.username).all()
     followingcount=len(following)
-    followers=Follow.objects.filter(followed=profile_user.username).all()
+    followers=Following.objects.filter(followed=profile_user.username).all()
     followercount=len(followers)
     return render(request, 'instapp/other_profile.html',{"profile_user": profile_user,"posts":posts,"followingcount":followingcount,"followercount":followercount})
 
 @login_required(login_url='/accounts/login/')
 def search(request):
-    posts=Image.objects.all()
+    posts=Post.objects.all()
     if 'username' in request.GET and request.GET["username"]:
         search_term = request.GET.get("username")
-        following=Follow.objects.filter(username=search_term).all()
+        following=Following.objects.filter(username=search_term).all()
         followingcount=len(following)
-        followers=Follow.objects.filter(followed=search_term).all()
+        followers=Following.objects.filter(followed=search_term).all()
         followercount=len(followers)
         searched_user = User.objects.filter(username=search_term).first()
         if searched_user:
             message = f"{search_term}"
             return render(request, 'instapp/other_profile.html',{"profile_user": searched_user,"posts":posts,"followingcount":followingcount,"followercount":followercount})
         else:
-            message = "The username you are searching for does not exist.Thank you for visiting InstaNight."
-            return render(request, 'instapp/fourfor.html',{"message":message})
+            message = "The username you are searching for does not exist.Thank you for visiting Instagram."
+            return render(request, 'instapp/notfound.html',{"message":message})
     

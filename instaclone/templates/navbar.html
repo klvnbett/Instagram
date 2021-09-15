@@ -2,31 +2,36 @@
 <html lang="en">
 
 <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-    <div class="nav sticky-top" role="navigation" id="colored-nav">
+    <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
-                <div>
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </div>
+                <a class="navbar-brand" href="{% url 'index' %}">Instagram</a>
             </div>
-            <div class="nav navbar-nav navbar-right">
-                <ul class="nav">
-                    <li class="dropdown" id="icon">
-                        <a href="" class="nav-link" lass="dropdown-toggle btn btn-default" data-toggle="dropdown" role="button" aria-expanded="false">
-                            <i class="fas fa-user"></i>
-                        </a>
-                        {% if user.is_authenticated %}
-                        <ul class="dropdown-menu" role="menu" style="background-color:#6fa4b4;">
+
+            <!-- Adding a search form  -->
+            <div class="col-sm-4 col-md-4 navbar-right">
+
+                <form action="{%url 'profileresults' %}" role="search" class="form-inline" style="margin-top:1%;">
+                    <input type="text" style="width:300px;background: transparent;" class="form-control" placeholder="Search by username" name="username">
+                </form>
+            </div>
+            <!-- search form end -->
+            <div class="col-sm-6 col-md-6">
+                {% if user.is_authenticated %}
+                <ul>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle btn btn-default" data-toggle="dropdown" role="button" aria-expanded="false">Account
+                              <span class="caret"></span>
+                          </a>
+                        <ul class="dropdown-menu" role="menu">
                             <li>
-                                <a href="{%url 'profile' %}">Account</a>
+                                <a href="{%url 'index'%}">Home</a>
                             </li>
                             <li>
                                 <a href="/accounts/password/change">Change Password</a>
@@ -35,42 +40,17 @@
                                 <a href="/logout">Logout</a>
                             </li>
                         </ul>
-                        {% else %}
-                        <li>
-                            <a class='btn btn-default' href="/accounts/login">Login</a>
-                        </li>
-
-                        {% endif %}
                     </li>
-                    <li style="margin-right:2%;margin-top:1%;">
-                        <a href="{%url 'timeline' %}">
-                            <i class="fab fa-instagram" style="font-size:30px;"></i>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="{%url 'timeline' %}" class="nav-link" id="logo">Instagram</a>
-                    </li>
-                    <li class="nav-item">
-                        <form action="{%url 'profileresults' %}" role="search" class="form-inline" style="margin-top:1%;">
-                            <input type="text" style="width:300px;background: transparent;" class="form-control" placeholder="Search by username" name="username">
-                        </form>
-                    </li>
-                    <li id="icon">
-                        <a href="" class="nav-link">
-                            <i class="fas fa-compass"></i>
-                        </a>
-                    </li>
-                    <li id="icon">
-                        <a href="" class="nav-link" id="heart">
-                            <i class="fas fa-heart"></i>
-                        </a>
-                    </li>
-
                 </ul>
+                {% else %}
+                <li>
+                    <a class='btn btn-default' href="/accounts/login">Login</a>
+                </li>
+
+                {% endif %}
             </div>
         </div>
-    </div>
+    </nav>
 </body>
 
 </html>

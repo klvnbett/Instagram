@@ -24,7 +24,7 @@
         <div class="col-sm-2 col-md-3">
             <div id="story">
             </div>
-            <h4 style="margin-top:5%;font:bold;font-size: 20px;">Activities</h4>
+            <h4 style="margin-top:5%;font:bold;font-size: 20px;">Stories</h4>
         </div>
         <div class="col-sm-2 col-md-3">
             <div id="story">
@@ -54,10 +54,10 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{%url 'timeline' %}">
-                            <i class="fas fa-th"></i> Images</a>
+                            <i class="fas fa-th"></i> Images And Posts</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{%url 'welcome' %}">
+                        <a class="nav-link" href="{%url 'index' %}">
                             <i class="fas fa-hashtag"></i> Tags
                         </a>
                     </li>
@@ -66,9 +66,9 @@
         </div>
     </div>
     <div class="row" id="parent">
-        {% for image in images %} {% if profile_user.profile.id == image.profile.id %}
+        {% for post in posts %} {% if profile_user.profile.id == post.profile.id %}
         <div id="child">
-            <img src="{{image.pic.url}}" alt="" id="image" class="img-fluid">
+            <img src="{{post.pic.url}}" alt="" id="post" class="img-fluid">
         </div>
         {% endif %} {% endfor %}
     </div>

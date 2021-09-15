@@ -1,12 +1,14 @@
 from .models import *
 from django import forms
 
-class FormDetails(forms.ModelForm):
+class DetailsForm(forms.ModelForm):
     class Meta:
         model = Profile
         exclude = ['user']
 
-class FormImage(forms.ModelForm):
+class PostForm(forms.ModelForm):
     class Meta:
-        model = Image
+        model = Post
         exclude = ['profile','date','like']
+
+       
