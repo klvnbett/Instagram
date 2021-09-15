@@ -47,7 +47,19 @@ To run the automated tests for this system, run the following command
 
 ```
 python3.6 manage.py test instaclone
+```
+## Deployment
 
+To deploy on heroku:
+*   Have a Procfile in the project root;
+*   Update requirements.txt file with all the requirements in the project root;
+*   Have Gunicorn to requirements.txt;
+*   Have runtime.txt to specify the correct Python version in the project root;
+*   Ensure configuration whitenoise to serve static files.
+*   Add a heroku remote by logging in
+*   Configure all the settings in .env on heroku (set MODE to 'prod' on heroku)
+*   git push to heroku
+*   git push database and migrate to heroku server
 ## License
 
 This project is licensed under the [MIT] License 
