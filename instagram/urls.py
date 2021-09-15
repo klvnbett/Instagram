@@ -18,6 +18,7 @@ from django.conf.urls import include,url
 from django.contrib.auth import views
 from django.urls import path,include
 from django_registration.backends.one_step.views import RegistrationView
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
 
@@ -25,6 +26,6 @@ urlpatterns = [
     url('admin/', admin.site.urls),
     url('',include('instaclone.urls')),
     url('accounts/', include('registration.backends.simple.urls')),
-    
+    url('logout/', LogoutView.as_view(), {"next_page": ''}),
     url('accounts/register/',RegistrationView.as_view(success_url='/accounts/login'),name='django_registration_register'),
 ]

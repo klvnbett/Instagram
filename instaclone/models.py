@@ -15,20 +15,20 @@ class Post(models.Model):
     profile = models.ForeignKey(Profile,on_delete=models.CASCADE)
     like = models.IntegerField(default=0)
 
-    @classmethod
-	def save_post(self):
+   
+def save_post(self):
 		self.save()
 
-	@classmethod
-	def delete_post(self):
+	
+def delete_post(self):
 		self.delete()
 
 	
-	def total_likes(self):
-		self.likes.count()
+	# def total_likes(self):
+	# 	self.likes.count()
 
-	def __str__(self):
-		return self.pic
+	# def __str__(self):
+	# 	return self.pic
     
 
 class Following(models.Model):
